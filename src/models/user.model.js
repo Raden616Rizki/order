@@ -1,5 +1,7 @@
-const createModelHelper = require('../helpers/model_helper')
+const createModelHelper = require('../helpers/model.helper')
 const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
+const { JWT_SECRET, JWT_TTL } = require('../../config');
 
 const name = 'User';
 const tableName = 'users';
@@ -42,9 +44,34 @@ module.exports = (knex) => {
     const create = (props) => beforeSave(props)
         .then((user) => userHelper.create(user));
 
+    const verify = async (email, password) => {
+        const user = await knex.select()
+            .from(tableName)
+            .where({ email })
+        
+        if (user.length > 0) {
+            const isMatch = await verifyPassword(password, user[0].password);
+            if (isMatch) {
+                delete user[0].password; // Remove password from the result
+                const token = jwt.sign(user[0], JWT_SECRET, {
+                    expiresIn: JWT_TTL,
+                });
+                return {
+                    ...user[0],
+                    token,
+                }
+            } else {
+                return null; // Password does not match
+            }
+        }
+
+        throw new Error('Password does not match');
+    }
+
     return {
         name,
         ...userHelper,
         create,
+        verify,
     }
 }

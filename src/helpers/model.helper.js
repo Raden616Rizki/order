@@ -1,4 +1,3 @@
-
 /**
  * The helper functions of a model that uses Knexjs to store and retrieve data from a
  * database using the provided 'knex' instance. Custom functionality can be
@@ -13,21 +12,21 @@ module.exports = ({
     knex = {},
     name = 'name',
     tableName = 'tableName',
-    selectTableProps = [],
+    selectableProps = [],
     timeout = 1000   
 }) => {
     // Create an entity
     const create = (props) => {
         delete props.id; // Not allowed to set id manually
 
-        return knex(props)
-            .returning(selectTableProps)
+        return knex.insert(props)
+            .returning(selectableProps)
             .into(tableName)
             .timeout(timeout);
     }
 
     // Find list of entity
-    const find = (filters) => knex.select(selectTableProps)
+    const find = (filters) => knex.select(selectableProps)
         .from(tableName)
         .where(filters)
         .timeout(timeout);

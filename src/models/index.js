@@ -7,7 +7,7 @@
 const fs = require('fs');
 const path = require('path');
 const debug = require('debug')('order:modelsIndex');
-const knex = require('../../database/knexfile');
+const knex = require('../../database/connection');
 
 const getModelFiles = (dir) => fs.readdirSync(dir)
     .filter((file) => (file.indexOf('.') !== -1) && (file !== 'index.js'))
@@ -27,4 +27,4 @@ const models = files.reduce((modelObj, filename) => {
     return modelObj;
 }, {});
 
-model.exports = models;
+module.exports = models;
