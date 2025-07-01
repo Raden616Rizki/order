@@ -65,7 +65,28 @@ const postLogin = async (req, res, next) => {
             ok: true,
             message: 'Login successful',
             token: user.token,
+            verified: user.email_verification_status === 'VERIFIED' ? true : false,
         })
+    } catch (e) {
+        return next(createError({
+            status: UNAUTHORIZED,
+            message: e,
+        }));
+    }
+}
+
+const verifyEmail = async (req, res, next) => {
+    const { email, token } = req.body;
+
+    try {
+        const verified = await EmailVerification.verifyEmail(email, token);
+        if (!verified) {
+            return next(createError({
+                status: NOT_FOUND,
+                message: 'Email verification failed',
+            }));
+        }
+        return res.json(verified);
     } catch (e) {
         return next(createError({
             status: UNAUTHORIZED,
@@ -77,4 +98,5 @@ const postLogin = async (req, res, next) => {
 module.exports = {
     postRegister,
     postLogin,
+    verifyEmail
 }
