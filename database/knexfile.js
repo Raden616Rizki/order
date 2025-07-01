@@ -5,7 +5,7 @@
  */
 module.exports = {
 
-  dev: {
+  development: {
     client: 'pg',
     connection: 'postgres://postgres:salut01@localhost/book_order',
     migrations: {
@@ -13,22 +13,6 @@ module.exports = {
     },
     seeds: {
       directory: `${__dirname}/seeds`
-    }
-  },
-
-  staging: {
-    client: 'postgresql',
-    connection: {
-      database: 'my_db',
-      user:     'username',
-      password: 'password'
-    },
-    pool: {
-      min: 2,
-      max: 10
-    },
-    migrations: {
-      tableName: 'knex_migrations'
     }
   },
 

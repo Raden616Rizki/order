@@ -16,7 +16,7 @@ exports.sendConfirmationEmail = (token, userName, userEmail) => {
     const msg = {
         to: userEmail,
         from: SENDGRID_NOREPLY_EMAIL,
-        subject: 'Confirm Your Email Address For Registration in Online Book Order App',
+        subject: `Confirm Your Email Address For Registration in Online Book Order App ${Date.now()}`,
         html: format(email, {
         userName,
         token,

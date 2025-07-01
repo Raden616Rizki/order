@@ -1,4 +1,6 @@
-const { User } = require('../models');
+const crypto = require('crypto');
+const { User, EmailVerification } = require('../models');
+const Email = require('../utils/email')
 const {
     createError,
     UNAUTHORIZED,
@@ -6,6 +8,12 @@ const {
     NOT_FOUND,
     CONFLICT,
 } = require('../helpers/error.helper');
+
+const confirmEmail = async (name, email) => {
+    const token = crypto.randomBytes(8).toString('hex');
+    EmailVerification.create({ token, email })
+        .then(() => Email.sendConfirmationEmail(token, name, email));
+}
 
 const postRegister = async (req, res, next) => {
     const props = req.body.user;
@@ -21,6 +29,7 @@ const postRegister = async (req, res, next) => {
         }
 
         user = await User.create(props);
+        await confirmEmail(`${props.first_name} ${props.last_name}`, props.email);
 
         res.json({
             ok: true,

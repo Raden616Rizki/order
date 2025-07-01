@@ -1,6 +1,6 @@
 const Email = require('./src/utils/email');
 
-const token = 'ABC123';
+const token = 'ABC124';
 const name = 'Raden Rizki';
 const email = 'rizkiraden616@gmail.com';
 
