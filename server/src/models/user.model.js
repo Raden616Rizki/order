@@ -50,6 +50,10 @@ module.exports = (knex) => {
             .where({ email })
         
         if (user.length > 0) {
+            if (user[0].email_verification_status === 'NOTVERIFIED') {
+                throw new Error('Email is not verified!');
+
+            }
             const isMatch = await verifyPassword(password, user[0].password);
             if (isMatch) {
                 delete user[0].password; // Remove password from the result
@@ -65,7 +69,7 @@ module.exports = (knex) => {
             }
         }
 
-        throw new Error('Password does not match');
+        throw new Error('Password does not match!');
     }
 
     return {
