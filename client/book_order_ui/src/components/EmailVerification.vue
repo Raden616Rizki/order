@@ -25,7 +25,6 @@
 <script>
 import axios from 'axios';
 import swal from 'sweetalert2';
-import UserLogin from './UserLogin.vue';
 
 export default {
     name: 'EmailVerification',
@@ -50,7 +49,7 @@ export default {
                     title: 'Login Successful',
                     text: 'You have successfully verified',
                 })
-                this.$router.push({name: UserLogin});
+                this.$router.push({path: '/login'});
             } catch (e) {
                 swal.fire({
                     icon: 'error',
