@@ -7,6 +7,7 @@ const {
     BAD_REQUEST,
     NOT_FOUND,
     CONFLICT,
+    GENERAL_ERROR,
 } = require('../helpers/error.helper');
 
 const confirmEmail = async (name, email) => {
@@ -17,6 +18,20 @@ const confirmEmail = async (name, email) => {
 
 const postRegister = async (req, res, next) => {
     const props = req.body.user;
+
+    if (!props.email || !props.password || !props.first_name || !props.last_name || !props.role) {
+        return next(createError({
+            status: BAD_REQUEST,
+            message: 'Email, password, first_name, last_name dan role are required',
+        }));
+    }
+
+    if (!props.password && props.password.length < 6) {
+        return next(createError({
+            status: BAD_REQUEST,
+            message: 'Password should be at least 6 characters long',
+        }));
+    }
 
     try {
         let user = await User.findOne({ email: props.email });
@@ -37,7 +52,10 @@ const postRegister = async (req, res, next) => {
             user
         });
     } catch (e) {
-        next(e);
+        return next(createError({
+            status: GENERAL_ERROR,
+            message: 'Internal Server Error',
+        }));
     }
 }
 
@@ -77,6 +95,13 @@ const postLogin = async (req, res, next) => {
 
 const verifyEmail = async (req, res, next) => {
     const { email, token } = req.body;
+
+    if (!email || !token) {
+        return next(createError({
+            status: BAD_REQUEST,
+            message: 'Email and token are required',
+        }));
+    }
 
     try {
         const verified = await EmailVerification.verifyEmail(email, token);
