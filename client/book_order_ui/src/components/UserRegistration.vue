@@ -76,7 +76,7 @@ export default {
         async register() {
             if (this.passwordMatch) {
                 try {
-                    await axios.post('http://localhost:3001/register', {
+                    await axios.post('http://localhost:7007/register', {
                         user: this.user
                     });
                     swal.fire({

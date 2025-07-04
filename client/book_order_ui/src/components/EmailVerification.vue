@@ -40,7 +40,7 @@ export default {
     methods: {
         async verify() {
             try {
-                await axios.post('http://localhost:3001/email_verification', {
+                await axios.post('http://localhost:7007/email_verification', {
                     email: this.email,
                     token: this.token
                 });

@@ -39,7 +39,7 @@ export default {
     methods: {
         async login() {
             try {
-                await axios.post('http://localhost:3001/login', {
+                await axios.post('http://localhost:7007/login', {
                     email: this.email,
                     password: this.password
                 });

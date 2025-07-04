@@ -1,0 +1,75 @@
+openapi: 3.0.2
+info:
+  version: 1.0.0
+  title: Online Book Order APIs with Authentication & Authorization
+  description: Online Book Order APIs with Authentication & Authorization
+
+servers:
+  - url: http://localhost:7007
+
+paths:
+  /auth/register:
+    post:
+      tags:
+      - Auth
+      summary: Registration
+      description: "Create account in application"
+      requestBody:
+        description: 'Payload for registration'
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Registration_Payload'
+      responses:
+        200:
+          description: 'Regitration Successfull'
+        201:
+          description: 'User Created'
+        400:
+          description: 'Bad Request'
+        500:
+          description: 'Internal Server Error'
+
+  /auth/login:
+    post:
+      tags:
+      - Auth
+      summary: Login
+      description: "User Authentication"
+      requestBody:
+        description: 'Payload for login'
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Login_Payload'
+      responses:
+        200:
+          description: 'Login Successfull'
+        400:
+          description: 'Bad Request'
+        500:
+          description: 'Internal Server Error'
+
+  /auth/email_verification:
+    post:
+      tags:
+      - Todo
+      summary: Email Verification
+      description: "Verify your email address by providing token"
+      requestBody:
+        description: 'Payload for Email Verification'
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Email_Verification'
+      security:
+        - bearerAuth: []
+      responses:
+        200:
+          description: 'Email Verification Successfull'
+        400:
+          description: 'Bad Request'
+        401:
+          description: 'Unauthorized'
+        500:
+          description: 'Internal Server Error'

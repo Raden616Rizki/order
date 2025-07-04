@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "SET DEBUG=order:* & SET NODE_ENV=prod && node index.js",
-    "dev": "SET DEBUG=order:* & SET NODE_ENV=development && node index.js",
+    "dev": "SET DEBUG=order:* & SET NODE_ENV=development && nodemon index.js",
     "lint-fix": "eslint . --fix",
     "test": "SET NODE_ENV=development & node test.js"
   },
@@ -23,10 +23,14 @@
     "fs": "^0.0.1-security",
     "jsonwebtoken": "^9.0.2",
     "knex": "^3.1.0",
+    "morgan": "^1.10.0",
     "ng": "^0.0.0",
+    "nodemon": "^3.1.10",
     "path": "^0.12.7",
     "pg": "^8.16.3",
-    "string-template": "^1.0.0"
+    "string-template": "^1.0.0",
+    "swagger-ui-express": "^5.0.1",
+    "yamljs": "^0.3.0"
   },
   "devDependencies": {
     "@eslint/css": "^0.9.0",
