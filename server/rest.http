@@ -1,5 +1,5 @@
 ### Register
-POST http://localhost:7007/register
+POST http://localhost:7007/auth/register
 Content-Type: application/json
 
 {
@@ -13,7 +13,7 @@ Content-Type: application/json
 }
 
 ### Login
-POST http://localhost:7007/login
+POST http://localhost:7007/auth/login
 Content-Type: application/json
 
 {
@@ -22,7 +22,7 @@ Content-Type: application/json
 }
 
 ### Email Verification
-POST http://localhost:7007/email_verification
+POST http://localhost:7007/auth/email_verification
 Content-Type: application/json
 
 {

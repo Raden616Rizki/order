@@ -1,4 +1,5 @@
 const crypto = require('crypto');
+const debug = require('debug')('app:auth.controller');
 const { User, EmailVerification } = require('../models');
 const Email = require('../utils/email')
 const {
@@ -12,6 +13,7 @@ const {
 
 const confirmEmail = async (name, email) => {
     const token = crypto.randomBytes(8).toString('hex');
+    debug(token);
     EmailVerification.create({ token, email })
         .then(() => Email.sendConfirmationEmail(token, name, email));
 }
