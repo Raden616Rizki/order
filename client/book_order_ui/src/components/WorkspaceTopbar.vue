@@ -4,8 +4,12 @@
 
         <div class="navbar-nav">
             <ul class="navbar-nav">
-                <li class="nav-link">
-                    <a class="nav-link" href="javascript:void(0)">Manage Book</a>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" href="javascript:void(0)">Manage Book</a>
+                    <div class="dropdown-menu">
+                        <router-link to="/admin/addbooks" class="dropdown-item" href="javascript:void(0)">Add Book</router-link>
+                        <router-link to="/admin/books" class="dropdown-item" href="javascript:void(0)">Listing Book</router-link>
+                    </div>
                 </li>
             </ul>
         </div>
@@ -15,12 +19,19 @@
                 Logged in as Raden Rizki
             </span>
         </div>
-        <button class="btn btn-link">Logout</button>
+        <button @click="logout" class="btn btn-link">Logout</button>
     </nav>
 </template>
 <script>
+import router from '@/router';
+
 export default {
     name: "WorkspaceTopbar",
+    methods: {
+        logout() {
+            router.push({path: '/auth/login'})
+        }
+    }
 }
 </script>
 <style lang="">

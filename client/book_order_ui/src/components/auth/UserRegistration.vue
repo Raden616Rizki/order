@@ -1,8 +1,11 @@
 <template>
     <div class="row mt-5">
         <div class="col-md-12 m-auto">
+            <div class="card card-header" style="background-color: white;">
+                <h1>Online Book Order</h1>
+            </div>
             <div class="card card-body text-center">
-                <h1>Registration</h1>
+                <h2>Registration</h2>
                 <form @submit.prevent="register()">
                     <div class="form-group">
                         <label for="email" class="float-left">Email</label>
@@ -41,10 +44,12 @@
                     </div>
                     <button type="submit" class="btn btn-success float-left">Submit</button>
                 </form>
-                <p class="mt-4">
-                    <span class="float-left">Go to Home? <a href="/">Home</a></span>
-                    <span class="float-right">Go to Login? <a href="/login">Login</a></span>
-                </p>
+                <div class="form-group">
+                    <div class="text-center">
+                        Already have an account?
+                        <router-link to="/auth/login" class="text-info font-weight-bold">Login</router-link>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -85,7 +90,7 @@ export default {
                         text: 'You have successfully registered. Please check mailbox for token to validate your email address',
                     })
                     this.$router.push({
-                        path: '/verify-email',
+                        path: '/auth/verify-email',
                         query: { email: this.user.email }
                     });
                 } catch (e) {

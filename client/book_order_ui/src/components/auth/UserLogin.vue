@@ -1,8 +1,11 @@
 <template>
     <div class="row mt-5">
         <div class="col-md-12 m-auto">
+            <div class="card card-header" style="background-color: white;">
+                <h1>Online Book Order</h1>
+            </div>
             <div class="card card-body text-center">
-                <h1>Login</h1>
+                <h2>Login</h2>
                 <form @submit.prevent="login()">
                     <div class="form-group">
                         <label for="email" class="float-left">Email</label>
@@ -15,10 +18,14 @@
                             placeholder="Enter your password" required>
                     </div>
                     <button type="submit" class="btn btn-success float-left">Submit</button>
+                    <button type="reset" class="btn btn-secondary float-left ml-2">Reset</button>
                 </form>
-                <p class="lead mt-4">
-                    Go to Home? <a href="/">Home</a>
-                </p>
+                <div class="form-group">
+                    <div class="text-center">
+                        Don't have an account?
+                        <router-link to="/auth/registration" class="text-info font-weight-bold">Sign Up</router-link>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -47,7 +54,8 @@ export default {
                     icon: 'success',
                     title: 'Login Successful',
                     text: 'You have successfully logged in.',
-                })
+                });
+                this.$router.push({path: '/'});
             } catch (e) {
                 swal.fire({
                     icon: 'error',
