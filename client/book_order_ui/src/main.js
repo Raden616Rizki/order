@@ -3,6 +3,7 @@ import axios from 'axios'
 import VueAxios from 'vue-axios'
 import router from './router'
 import App from './App.vue'
+import store from './store'
 
 // Create a new vue3 instance
 const app = createApp(App)
@@ -26,6 +27,7 @@ app.config.globalProperties.axios.interceptors.request.use((config) => {
     return Promise.reject(err);
 })
 
+// Setup a response interceptor to handel unauthorized (401) response
 app.config.globalProperties.axios.interceptors.response.use((res) => {
     return res;
 }, (err) => {
@@ -34,6 +36,9 @@ app.config.globalProperties.axios.interceptors.response.use((res) => {
     }
     return Promise.reject(err);
 })
+
+// Use the Vue Store
+app.use(store)
 
 // Use the Vue Router
 app.use(router)

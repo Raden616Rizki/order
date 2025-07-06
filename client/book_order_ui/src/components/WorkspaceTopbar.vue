@@ -16,20 +16,26 @@
 
         <div class="navbar-test ml-auto">
             <span class="logged-in-user">
-                Logged in as Raden Rizki
+                {{currentUser?.name}} ({{currentUser?.role}})
             </span>
         </div>
         <button @click="logout" class="btn btn-link">Logout</button>
     </nav>
 </template>
 <script>
+import { mapGetters } from 'vuex';
+
 import router from '@/router';
 
 export default {
     name: "WorkspaceTopbar",
+    computed: {
+        ...mapGetters(['currentUser'])
+    },
     methods: {
         logout() {
-            router.push({path: '/auth/login'})
+            this.$store.commit('logout');
+            router.replace({path: '/auth/login'})
         }
     }
 }

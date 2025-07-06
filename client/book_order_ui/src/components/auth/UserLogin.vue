@@ -32,7 +32,6 @@
 </template>
 
 <script>
-import axios from 'axios';
 import swal from 'sweetalert2';
 
 export default {
@@ -46,10 +45,11 @@ export default {
     methods: {
         async login() {
             try {
-                await axios.post('http://localhost:7007/auth/login', {
+                const {data} = await this.$http.post('auth/login', {
                     email: this.email,
                     password: this.password
                 });
+                this.$store.commit('login', data);
                 swal.fire({
                     icon: 'success',
                     title: 'Login Successful',

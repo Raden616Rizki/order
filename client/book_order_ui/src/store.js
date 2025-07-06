@@ -13,13 +13,13 @@ const state = {
 }
 
 // Define mutations to modify the state
-const mutation = {
-    [login]: (state, data) => {
+const mutations = {
+    login (state, data) {
         state.token = data.token;
         state.user = User.from(data.token);
         localStorage.setItem('token', data.token);
     },
-    [logout]: (state, data) => {
+    logout (state) {
         state.token = null;
         state.user = null;
         localStorage.removeItem('token');
@@ -48,7 +48,7 @@ const actions = {
 
 export default createStore({
     state,
-    mutation,
+    mutations,
     getters,
     actions,
 });
