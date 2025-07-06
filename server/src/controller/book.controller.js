@@ -43,7 +43,7 @@ const getAllBooksFiltered = async (req, res) => {
     }
 
     if (maxPrice) {
-        filters.price = { max: maxPrice };
+        filters.price = { ...filters.price, max: maxPrice };
     }
 
     try {

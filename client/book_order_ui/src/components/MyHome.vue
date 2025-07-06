@@ -11,11 +11,11 @@
                             <h5 class="card-title">Price of Books</h5>
                             <div class="price-bar-filter">
                                 <label for="minPrice">Min Price:</label>
-                                <input type="range" name="minprice" id="minprice" class="form-control-range" min="0" max="100">
-                                <span class="range-value">0</span>
+                                <input v-model="minPrice" type="range" name="minprice" id="minprice" class="form-control-range" min="0" :max="bookMaxPrice" @change="handleSlideChange">
+                                <span class="range-value">{{ minPrice }}</span>
                                 <label for="maxPrice">Max Price:</label>
-                                <input type="range" name="maxprice" id="maxprice" class="form-control-range" min="0" max="100">
-                                <span class="range-value">100</span>
+                                <input v-if="maxPrice > 0" v-model="maxPrice" type="range" name="maxprice" id="maxprice" class="form-control-range" min="1" :max="bookMaxPrice" @change="handleSlideChange">
+                                <span class="range-value">{{ maxPrice }}</span>
                             </div>
                         </div>
                     </div>
@@ -29,102 +29,25 @@
                     <a href="javascript:void(0)" class="btn btn-secondary ml-2">Reset</a>
                 </form>
                 <div class="row mt-3">
-                    <div class="col-md-3">
+                    <div class="col-md-3" v-for="(book, index) of books" :key="index">
                         <div class="ibox">
                             <div class="ibox-content product-box">
                                 <div class="product-imitation">
-                                    [ INFO ]
+                                    {{ book?.title }}
                                 </div>
                                 <div class="product-desc">
                                     <span class="product-price">
-                                        $10
+                                        Rp {{ book?.price }}
                                     </span>
-                                    <small class="text-muted">Category</small>
-                                    <a href="#" class="product-name"> Product</a>
+                                    <small class="text-muted">In Stock: {{ book?.quantit_available }}</small>
+                                    <a href="#" class="product-name"> {{ book?.title }}</a>
 
                                     <div class="small m-t-xs">
-                                        Many desktop publishing packages and web page editors now.
+                                        Written By: {{ book?.author }}
                                     </div>
                                     <div class="m-t text-righ">
 
-                                        <a href="#" class="btn btn-xs btn-outline btn-primary">Info <i class="fa fa-long-arrow-right"></i> </a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-3">
-                        <div class="ibox">
-                            <div class="ibox-content product-box">
-
-                                <div class="product-imitation">
-                                    [ INFO ]
-                                </div>
-                                <div class="product-desc">
-                                    <span class="product-price">
-                                        $10
-                                    </span>
-                                    <small class="text-muted">Category</small>
-                                    <a href="#" class="product-name"> Product</a>
-
-
-
-                                    <div class="small m-t-xs">
-                                        Many desktop publishing packages and web page editors now.
-                                    </div>
-                                    <div class="m-t text-righ">
-
-                                        <a href="#" class="btn btn-xs btn-outline btn-primary">Info <i class="fa fa-long-arrow-right"></i> </a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-3">
-                        <div class="ibox">
-                            <div class="ibox-content product-box active">
-
-                                <div class="product-imitation">
-                                    [ INFO ]
-                                </div>
-                                <div class="product-desc">
-                                    <span class="product-price">
-                                        $10
-                                    </span>
-                                    <small class="text-muted">Category</small>
-                                    <a href="#" class="product-name"> Product</a>
-
-
-
-                                    <div class="small m-t-xs">
-                                        Many desktop publishing packages and web page editors now.
-                                    </div>
-                                    <div class="m-t text-righ">
-
-                                        <a href="#" class="btn btn-xs btn-outline btn-primary">Info <i class="fa fa-long-arrow-right"></i> </a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-3">
-                        <div class="ibox">
-                            <div class="ibox-content product-box">
-
-                                <div class="product-imitation">
-                                    [ INFO ]
-                                </div>
-                                <div class="product-desc">
-                                    <span class="product-price">
-                                        $10
-                                    </span>
-                                    <small class="text-muted">Category</small>
-                                    <a href="#" class="product-name"> Product</a>
-                                    <div class="small m-t-xs">
-                                        Many desktop publishing packages and web page editors now.
-                                    </div>
-                                    <div class="m-t text-righ">
-                                        <a href="#" class="btn btn-xs btn-outline btn-primary">Info <i class="fa fa-long-arrow-right"></i> </a>
+                                        <a href="#" class="btn btn-xs btn-outline btn-primary mt-3">Info <i class="fa fa-long-arrow-right"></i> </a>
                                     </div>
                                 </div>
                             </div>
@@ -135,6 +58,56 @@
         </div>
     </div>
 </template>
+
+<script>
+export default {
+  name: 'MyHome',
+  data() {
+    return {
+      books: [],
+      total: null,
+      minPrice: 0,
+      maxPrice: 0,
+      bookMaxPrice: 100,
+      filters: {
+        minPrice: 0,
+        maxPrice: null,
+      }
+    }
+  },
+  mounted() {
+    this.init();
+  },
+  methods: {
+    async init() {
+      await this.getBooks();
+      this.calculateBookMaxPrice();
+    },
+    async getBooks() {
+      try {
+        const {data} = await this.$http.get('/books', {
+          params: this.filters,
+        });
+        this.books = data?.items;
+        this.total = data?.total;
+      } catch (e) {
+        console.error(e);
+      }
+    },
+    async handleSlideChange() {
+      this.filters.minPrice = this.minPrice;
+      this.filters.maxPrice = this.maxPrice;
+      await this.getBooks();
+    },
+    calculateBookMaxPrice() {
+      this.maxPrice = this.bookMaxPrice = this.books.reduce((max, book) => {
+        const price = parseFloat(book.price);
+        return price > max ? price : max;
+      }, 0);
+    }
+  }
+}
+</script>
 
 <style scoped>
 .price-bar-filter {

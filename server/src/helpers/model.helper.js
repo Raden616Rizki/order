@@ -77,7 +77,7 @@ module.exports = ({
       });
 
       // Count total items
-      const totalCountQuery = knex(tableName).count("* as total");
+      const totalCountQuery = query.clone().clearSelect().count("* as total");
       const [{ total }] = await totalCountQuery;
 
       // Pagination query
