@@ -33,6 +33,7 @@
 
 <script>
 import swal from 'sweetalert2';
+import router from '@/router';
 
 export default {
     name: 'UserLogin',
@@ -55,7 +56,8 @@ export default {
                     title: 'Login Successful',
                     text: 'You have successfully logged in.',
                 });
-                this.$router.push({path: '/'});
+                const redirectPath = this.$route.query.redirect || '/';
+                router.replace(redirectPath);
             } catch (e) {
                 swal.fire({
                     icon: 'error',

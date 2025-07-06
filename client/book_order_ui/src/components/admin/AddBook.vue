@@ -21,7 +21,7 @@
                     </div>
                     <div class="form-group">
                         <label for="quantity" class="float-left">Quantity Available</label>
-                        <input type="number" name="quantity" id="quantity" v-model="book.qantity_available" class="form-control"
+                        <input type="number" name="quantity" id="quantity" v-model="book.quantity_available" class="form-control"
                             placeholder="Enter quantity available of book" required>
                     </div>
                     <button type="submit" class="btn btn-success float-left">Submit</button>
@@ -32,6 +32,8 @@
     </div>
 </template>
 <script>
+import swal from 'sweetalert2';
+
 export default {
     name: "AddBook",
     data() {
@@ -41,13 +43,61 @@ export default {
                 author: null,
                 price: null,
                 quantity_available: null
+            },
+            isEdit: false
+        }
+    },
+    mounted() {
+        console.log(this.$route.query.id);
+        if (this.$route.query.id) {
+            this.book = {
+                title: this.$route.query.title,
+                author: this.$route.query.author,
+                price: Number(this.$route.query.price),
+                quantity_available: Number(this.$route.query.quantity),
+                id: this.$route.query.id
+            };
+            this.isEdit = true;
+        } else {
+            this.book= {
+                title: null,
+                author: null,
+                price: null,
+                quantity_available: null
             }
         }
     },
     methods: {
-        addBook() {
+        async addBook() {
+            try {
+                if (this.isEdit) {
+                    // Update
+                    await this.$http.put(`/books/${this.$route.params.id}`, this.book);
+                    swal.fire({
+                        icon: 'success',
+                        title: 'Updated',
+                        text: 'Book updated successfully.',
+                });
+                } else {
+                    // Create
+                    await this.$http.post('/books', this.book);
+                    swal.fire({
+                        icon: 'success',
+                        title: 'Created',
+                        text: 'Book added successfully.',
+                    });
+                }
 
-        }
+                this.$router.push('/admin/books');
+            } catch (e) {
+                console.error(e);
+                swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: 'Failed to save book.',
+                });
+            }
+        },
     }
 }
 </script>

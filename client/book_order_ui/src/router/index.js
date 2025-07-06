@@ -25,7 +25,7 @@ const routes = [
         children: [
           {
             name: "AddBook",
-            path: "addbooks",
+            path: "addbooks/:id?",
             component: AddBook,
           },
           {

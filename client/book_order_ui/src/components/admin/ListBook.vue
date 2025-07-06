@@ -15,34 +15,28 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <th scope="row">1</th>
-                            <td>Mark</td>
-                            <td>Otto</td>
-                            <td>100</td>
-                            <td>1000</td>
+                        <tr v-for="(book, index) of books" :key="index">
+                            <th scope="row">{{index+1}}</th>
+                            <td>{{book?.title}}</td>
+                            <td>{{book?.author}}</td>
+                            <td>{{book?.quantity_available}}</td>
+                            <td>Rp{{book?.price}}</td>
                             <td>
-                                <a href="javascript:void(0)" class="btn btn-sm btn-primary">Update</a>
-                            </td>
-                        </tr>
-                        <tr>
-                            <th scope="row">2</th>
-                            <td>Jacob</td>
-                            <td>Thornton</td>
-                            <td>100</td>
-                            <td>1000</td>
-                            <td>
-                                <a href="javascript:void(0)" class="btn btn-sm btn-primary">Update</a>
-                            </td>
-                        </tr>
-                        <tr>
-                            <th scope="row">3</th>
-                            <td>Larry</td>
-                            <td>the Bird</td>
-                            <td>100</td>
-                            <td>1000</td>
-                            <td>
-                                <a href="javascript:void(0)" class="btn btn-sm btn-primary">Update</a>
+                                <router-link
+                                :to="{
+                                    name: 'AddBook',
+                                    query: {
+                                    id: book.id,
+                                    title: book.title,
+                                    author: book.author,
+                                    price: book.price,
+                                    quantity: book.quantity_available
+                                    }
+                                }"
+                                class="btn btn-sm btn-primary"
+                                >
+                                Update
+                                </router-link>
                             </td>
                         </tr>
                     </tbody>
@@ -53,7 +47,25 @@
 </template>
 <script>
 export default {
-    name: "ListBook"
+    name: "ListBook",
+    data() {
+        return {
+            books: []
+        }
+    },
+    mounted() {
+        this.getBooks();
+    },
+    methods: {
+        async getBooks() {
+            try {
+                const {data} = await this.$http.get('/books');
+                this.books = data?.items;
+            } catch (e) {
+                console.error(e);
+            }
+        },
+    }
 }
 </script>
 <style lang="">

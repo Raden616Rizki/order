@@ -39,7 +39,7 @@
                                     <span class="product-price">
                                         Rp {{ book?.price }}
                                     </span>
-                                    <small class="text-muted">In Stock: {{ book?.quantit_available }}</small>
+                                    <small class="text-muted">In Stock: {{ book?.quantity_available }}</small>
                                     <a href="#" class="product-name"> {{ book?.title }}</a>
 
                                     <div class="small m-t-xs">
