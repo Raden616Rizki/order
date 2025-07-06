@@ -60,7 +60,7 @@ module.exports = ({
           if (typeof value === "object" && value !== null) {
             const { like, min, max } = value;
             if (like !== undefined) {
-              query.where(key, "like", `%${like}%`);
+              query.whereRaw('LOWER(??) LIKE ?', [key, `%${like.toLowerCase()}%`]);
             }
 
             if (min !== undefined) {

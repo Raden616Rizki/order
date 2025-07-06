@@ -23,10 +23,10 @@
             </div>
             <div class="col-lg-8 col-xl-9 col-md-9">
                 <form class="d-flex">
-                    <input type="search" class="form-control" placeholder="Search by Title">
-                    <input type="search" class="form-control ml-2" placeholder="Search by Author">
-                    <a href="javascript:void(0)" class="btn btn-primary ml-2">Search</a>
-                    <a href="javascript:void(0)" class="btn btn-secondary ml-2">Reset</a>
+                    <input v-model="filters.title" type="search" class="form-control" placeholder="Search by Title">
+                    <input v-model="filters.author" type="search" class="form-control ml-2" placeholder="Search by Author">
+                    <a @click="getBooks" href="javascript:void(0)" class="btn btn-primary ml-2">Search</a>
+                    <a @click="resetSearch" href="javascript:void(0)" class="btn btn-secondary ml-2">Reset</a>
                 </form>
                 <div class="row mt-3">
                     <div class="col-md-3" v-for="(book, index) of books" :key="index">
@@ -72,6 +72,8 @@ export default {
       filters: {
         minPrice: 0,
         maxPrice: null,
+        title: null,
+        author: null,
       }
     }
   },
@@ -104,6 +106,11 @@ export default {
         const price = parseFloat(book.price);
         return price > max ? price : max;
       }, 0);
+    },
+    async resetSearch() {
+      this.filters.author = null;
+      this.filters.title = null;
+      await this.getBooks();
     }
   }
 }
