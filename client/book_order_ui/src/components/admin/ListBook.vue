@@ -22,21 +22,7 @@
                             <td>{{book?.quantity_available}}</td>
                             <td>Rp{{book?.price}}</td>
                             <td>
-                                <router-link
-                                :to="{
-                                    name: 'AddBook',
-                                    query: {
-                                    id: book.id,
-                                    title: book.title,
-                                    author: book.author,
-                                    price: book.price,
-                                    quantity: book.quantity_available
-                                    }
-                                }"
-                                class="btn btn-sm btn-primary"
-                                >
-                                Update
-                                </router-link>
+                                <router-link :to="{name: 'AddBook', params: { id: book?.id }}" class="btn btn-sm btn-primary">Update</router-link>
                             </td>
                         </tr>
                     </tbody>

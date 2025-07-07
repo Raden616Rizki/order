@@ -35,72 +35,97 @@
 import swal from 'sweetalert2';
 
 export default {
-    name: "AddBook",
-    data() {
-        return {
-            book: {
-                title: null,
-                author: null,
-                price: null,
-                quantity_available: null
-            },
-            isEdit: false
-        }
-    },
-    mounted() {
-        console.log(this.$route.query.id);
-        if (this.$route.query.id) {
-            this.book = {
-                title: this.$route.query.title,
-                author: this.$route.query.author,
-                price: Number(this.$route.query.price),
-                quantity_available: Number(this.$route.query.quantity),
-                id: this.$route.query.id
-            };
-            this.isEdit = true;
-        } else {
-            this.book= {
-                title: null,
-                author: null,
-                price: null,
-                quantity_available: null
-            }
-        }
-    },
-    methods: {
-        async addBook() {
-            try {
-                if (this.isEdit) {
-                    // Update
-                    await this.$http.put(`/books/${this.$route.params.id}`, this.book);
-                    swal.fire({
-                        icon: 'success',
-                        title: 'Updated',
-                        text: 'Book updated successfully.',
-                });
-                } else {
-                    // Create
-                    await this.$http.post('/books', this.book);
-                    swal.fire({
-                        icon: 'success',
-                        title: 'Created',
-                        text: 'Book added successfully.',
-                    });
-                }
-
-                this.$router.push('/admin/books');
-            } catch (e) {
-                console.error(e);
-                swal.fire({
-                icon: 'error',
-                title: 'Error',
-                text: 'Failed to save book.',
-                });
-            }
-        },
+  name: "AddBook",
+  data() {
+    return {
+      book: {
+        title: '',
+        author: '',
+        price: '',
+        quantity_available: ''
+      },
+      isEdit: false
+    };
+  },
+  mounted() {
+    this.handleRouteChange();
+  },
+  watch: {
+    '$route.params.id': {
+      immediate: true,
+      handler() {
+        this.handleRouteChange();
+      }
     }
-}
+  },
+  methods: {
+    handleRouteChange() {
+      const id = this.$route.params.id;
+
+      if (id) {
+        this.isEdit = true;
+        this.fetchBook(id);
+      } else {
+        this.isEdit = false;
+        this.resetForm();
+      }
+    },
+
+    resetForm() {
+      this.book = {
+        title: '',
+        author: '',
+        price: '',
+        quantity_available: ''
+      };
+    },
+
+    async fetchBook(id) {
+      try {
+        const { data } = await this.$http.get(`/books/${id}`);
+        this.book = data;
+      } catch (e) {
+        console.error("Failed to fetch book data:", e);
+        swal.fire({
+          icon: 'error',
+          title: 'Error',
+          text: 'Failed to load book data.',
+        });
+      }
+    },
+
+    async addBook() {
+      try {
+        if (this.isEdit) {
+          await this.$http.put(`/books/${this.$route.params.id}`, this.book);
+          swal.fire({
+            icon: 'success',
+            title: 'Updated',
+            text: 'Book updated successfully.',
+          });
+        } else {
+          await this.$http.post('/books', this.book);
+          swal.fire({
+            icon: 'success',
+            title: 'Created',
+            text: 'Book added successfully.',
+          });
+        }
+
+        this.$router.push('/admin/books');
+      } catch (e) {
+        console.error(e);
+        swal.fire({
+          icon: 'error',
+          title: 'Error',
+          text: 'Failed to save book.',
+        });
+      }
+    }
+  }
+};
 </script>
+
 <style lang="">
 
 </style>
