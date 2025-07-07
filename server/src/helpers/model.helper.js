@@ -47,6 +47,13 @@ module.exports = ({
 
       return results[0];
     });
+  
+  const read = (id) => 
+    knex
+      .select(selectableProps)
+      .from(tableName)
+      .where({ id })
+      .first()
 
   const getAllItemsFiltered = async (filters = [], page = 1, limit = 10) => {
     try {
@@ -98,6 +105,7 @@ module.exports = ({
   return {
     create,
     update,
+    read,
     find,
     findOne,
     getAllItemsFiltered,

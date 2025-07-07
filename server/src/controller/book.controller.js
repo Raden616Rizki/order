@@ -26,6 +26,24 @@ const updateBook = async (req, res) => {
     }
 }
 
+const readBook = async (req, res) => {
+    const { id } = req.params;
+
+    try {
+        const book = await Books.read(id);
+
+        if (!book) {
+            return res.status(404).json({ message: 'Book not found' });
+        }
+
+        res.json(book);
+    } catch (e) {
+        console.error(e);
+        res.status(500).send('Error fetching book by ID');
+    }
+};
+
+
 const getAllBooksFiltered = async (req, res) => {
     const { title, author, minPrice, maxPrice, page, limit } = req.query;
     const filters = {};
@@ -55,4 +73,4 @@ const getAllBooksFiltered = async (req, res) => {
     }
 }
 
-module.exports = { createBook, updateBook, getAllBooksFiltered };
+module.exports = { createBook, updateBook, readBook, getAllBooksFiltered };

@@ -21,6 +21,7 @@ module.exports = (knex) => {
 
     const create = (book) => bookHelper.create(book);
     const update = (id, book) => bookHelper.update(id, book);
+    const read = (id) => bookHelper.read(id);
     const getAllBooksFiltered = (filters, page, limit) => bookHelper.getAllItemsFiltered(filters, page, limit);
 
     return {
@@ -28,6 +29,7 @@ module.exports = (knex) => {
         ...bookHelper,
         create,
         update,
+        read,
         getAllBooksFiltered,
     }
 }
