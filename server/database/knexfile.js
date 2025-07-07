@@ -1,13 +1,17 @@
-// Update with your config settings.
-
 /**
  * @type { Object.<string, import("knex").Knex.Config> }
  */
+
 module.exports = {
 
   development: {
-    client: 'pg',
-    connection: 'postgres://postgres:salut01@localhost/book_order',
+    client: 'mysql2',
+    connection: {
+      host: '127.0.0.1',
+      user: 'root',
+      password: '',
+      database: 'book_order'
+    },
     migrations: {
       directory: `${__dirname}/migrations`
     },
@@ -17,11 +21,12 @@ module.exports = {
   },
 
   production: {
-    client: 'postgresql',
+    client: 'mysql2',
     connection: {
-      database: process.env.DB,
+      host: process.env.DB_HOST,
       user: process.env.DB_USER,
-      password: process.env.DB_PASS
+      password: process.env.DB_PASS,
+      database: process.env.DB_NAME
     },
     pool: {
       min: 2,
