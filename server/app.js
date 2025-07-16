@@ -18,7 +18,7 @@ app.use(cors({
 app.use('/api-docs', swaggerUI.serve, swaggerUI.setup(swaggerJsDocs));
 app.use('/auth', require('./src/routes/auth.route'))
 app.use('/books', require('./src/routes/book.route'))
-app.use('/order', require('./src/routes/order.route'))
+app.use('/orders', require('./src/routes/order.route'))
 app.use(require('./src/middleware/error.middleware').all);
 
 module.exports = app;

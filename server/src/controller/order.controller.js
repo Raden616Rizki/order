@@ -1,5 +1,5 @@
 const { BooksUsers } = require('../models');
-const debug = require('debug')('app:book.controller');
+const debug = require('debug')('app:order.controller');
 
 const createOrder = async (req, res) => {
     const { book_id, user_id, quantity } = req.body;

@@ -27,7 +27,6 @@ module.exports = (knex) => {
         name,
         ...bookUserHelper,
         create,
-        update,
         read,
         getAllOrderFiltered,
     }
