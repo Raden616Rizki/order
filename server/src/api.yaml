@@ -227,9 +227,9 @@ paths:
           description: 'Internal Server Error'
     get:
       tags:
-      - Orders
+        - Orders
       summary: Get Orders List
-      description: "Authorized user can listing Orders"
+      description: Authorized user can list orders with filters by book or user
       parameters:
         - name: limit
           in: query
@@ -241,44 +241,103 @@ paths:
             maximum: 100
         - name: page
           in: query
-          description: Offset the results by a certain number
+          description: Page number for pagination
           required: false
           schema:
             type: integer
-            minimum: 0
+            minimum: 1
         - name: title
           in: query
-          description: Title of the book
+          description: Filter by book title
           required: false
           schema:
             type: string
         - name: author
           in: query
-          description: Author of the book
+          description: Filter by book author
           required: false
           schema:
             type: string
-        - name: maxPrice
+        - name: fullname
           in: query
-          description: maxPrice of the book
+          description: Filter by user full name (first name + last name)
           required: false
           schema:
-            type: integer
+            type: string
         - name: minPrice
           in: query
-          description: minPrice of the book
+          description: Filter by minimum total order price (book price x quantity)
           required: false
           schema:
-            type: integer
+            type: number
+            format: float
+        - name: maxPrice
+          in: query
+          description: Filter by maximum total order price (book price x quantity)
+          required: false
+          schema:
+            type: number
+            format: float
       security:
         - bearerAuth: []
       responses:
         200:
-          description: 'Fetch Order List Successfull'
+          description: Fetch Order List Successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  ok:
+                    type: boolean
+                    example: true
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        order_id:
+                          type: integer
+                          example: 1
+                        quantity:
+                          type: integer
+                          example: 2
+                        created_at:
+                          type: string
+                          format: date-time
+                          example: '2025-06-30T14:23:00Z'
+                        book_id:
+                          type: integer
+                          example: 1
+                        book_title:
+                          type: string
+                          example: 'Sherlock Holmes'
+                        book_author:
+                          type: string
+                          example: 'Arthur Conan Doyle'
+                        book_price:
+                          type: number
+                          format: float
+                          example: 12000
+                        user_id:
+                          type: integer
+                          example: 5
+                        user_email:
+                          type: string
+                          example: 'john@doe.com'
+                        user_first_name:
+                          type: string
+                          example: 'John'
+                        user_last_name:
+                          type: string
+                          example: 'Doe'
+                        user_role:
+                          type: string
+                          example: 'MEMBER'
         401:
-          description: 'Unauthorized'
+          description: Unauthorized
         500:
-          description: 'Internal Server Error'
+          description: Internal Server Error
 
   /orders/{id}:
       get:
